@@ -1,0 +1,18 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[codz]
+*$py.class
+
+# Environments
+.venv
+
+# Datasets
+data/raw/**/*.npz
+data/processed/**/*.npz
+
+# PyTorch models
+*.pt
+*.pth
+
+# Visual Studio Code
+.vscode/
