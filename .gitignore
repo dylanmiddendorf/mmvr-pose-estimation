@@ -8,6 +8,7 @@ __pycache__/
 
 # Datasets
 data/raw/**/*.npz
+data/interm/**/*.npz
 data/processed/**/*.npz
 
 # PyTorch models
