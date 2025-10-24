@@ -1,23 +1,25 @@
-from typing import Optional, Callable
+import numpy as np
+import numpy.typing as npt
 import torch
-from torch import Tensor
 import torch.utils.data as data
+from torch import Tensor
 
 
 class MMVR(data.Dataset):
-    def __init__(self, X, y, transform: Optional[Callable[[Tensor], Tensor]] = None):
+    def __init__(
+        self,
+        X: npt.NDArray[np.float16],
+        y: npt.NDArray[np.float16],
+        kp: npt.NDArray[np.float16],
+    ):
         assert len(X) == len(y)
 
-        self.X = torch.tensor(X)
-        self.y = torch.tensor(y)
-        self.transform = transform
+        self.X = torch.tensor(X, dtype=torch.float16)
+        self.y = torch.tensor(y, dtype=torch.float16)
+        self.kp = torch.tensor(kp, dtype=torch.float32)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.X)
 
-    def __getitem__(self, idx):
-        X_i, y_i = self.X[idx], self.y[idx]
-
-        if self.transform is not None:
-            X_i = self.transform(X_i)
-        return X_i, y_i
+    def __getitem__(self, idx: int) -> tuple[Tensor, Tensor, Tensor]:
+        return self.X[idx], self.y[idx], self.kp[idx]
