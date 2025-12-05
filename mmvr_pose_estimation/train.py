@@ -4,6 +4,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from models.benchmark.unet import UNet
 from models.lenet import LeNet
 from torch.amp import GradScaler, autocast
 from torch.utils.data import DataLoader
@@ -30,7 +31,7 @@ def train_model(
     lr=1e-3,
     device="cuda",
     mixed_precision=True,
-    save_path="models/lenet.pt",
+    save_path="models/unet.pt",
 ):
 
     model = model.to(device)
@@ -137,13 +138,13 @@ def get_dataset(file_path: str):
 
 if __name__ == "__main__":
     train_ds = get_dataset("data/processed/d1s2-train.npz")
-    train_dl = DataLoader(train_ds, batch_size=64, shuffle=True, num_workers=2)
+    train_dl = DataLoader(train_ds, batch_size=32, shuffle=True, num_workers=2)
 
     gc.collect()
 
     test_ds = get_dataset("data/processed/d1s2-test.npz")
-    test_dl = DataLoader(test_ds, batch_size=128, shuffle=False, num_workers=2)
+    test_dl = DataLoader(test_ds, batch_size=32, shuffle=False, num_workers=2)
 
     # Instantiate model and train
-    model = LeNet()
+    model = UNet()
     train_model(model, train_dl, test_dl, num_epochs=20)
